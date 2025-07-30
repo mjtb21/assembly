@@ -6,6 +6,7 @@ import Status from "./Status.jsx";
 import Lang from "./Lang.jsx";
 import WordLetter from "./WordLetter.jsx";
 import Letter from "./Letter.jsx";
+import themeAudio from "../assets/theme1.mp3";
 
 export default function Main() {
     const [word, setWord] = useState(() => getWord());
@@ -19,6 +20,11 @@ export default function Main() {
     const lost = langs.filter(lang => ! lang.status).length === 8 &&
         word.some(wordLetter => ! wordLetter.status)
     const anyDead = langs.some(lang => ! lang.status)
+
+    const themeMusic = document.getElementById('themeMusic');
+    if (isStarted && themeMusic && themeMusic.paused) {
+        // themeMusic.play();
+    }
 
     function handleLetter(e, letter) {
         const hit = word.some(wordLetter => wordLetter.value === letter.id)
@@ -48,7 +54,7 @@ export default function Main() {
 
     function getWord() {
         const word = wordsList[Math.floor(Math.random() * wordsList.length)]
-        console.log(word)
+        console.log("cheat: " + word)
         return word.split("").map((letter) => ({
             id: nanoid(),
             value: letter.toLowerCase(),
@@ -100,6 +106,7 @@ export default function Main() {
                     <Letter
                         key={letter.id}
                         letter={letter}
+                        isDone={isDone}
                         handleLetters={handleLetter}
                     />
                 ))}
@@ -112,6 +119,8 @@ export default function Main() {
                     New Game
                 </button>
             )}
+
+            <audio id="themeMusic" src={themeAudio}></audio>
         </main>
     )
 }
